@@ -25,9 +25,12 @@ int main()
 	else
 	{
 		int nBooksNumber = 0;
-		printf("Enter number of books: ");
-		scanf("%d", &nBooksNumber);
-
+		do
+		{
+			printf("Enter number of books: ");
+			if(scanf("%d", &nBooksNumber)) break;
+			printf("Bad input!\n");
+		} while (getchar() != "\n");
 		for (int i = 0; i < nBooksNumber; i++)
 		{
 			struct SBook curBook;
