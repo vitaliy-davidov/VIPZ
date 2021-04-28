@@ -62,7 +62,7 @@ int loadFromFile(FILE* pFile, struct SBook* pBook)
 	char szYear[10] = "", szPagesNumber[10] = "", szPrice[10] = "";
 	fscanf(pFile, "%s%s%s%s%s\n", pBook->szAutor, pBook->szTitle, szYear,szPagesNumber, szPrice);
 
-	if (testStrByNoNumber(szYear) || testStrByNoNumber(szPagesNumber) || testStrByNoNumber(szPrice))
+	if (testStrByNoNumber(szYear) || testStrByNoNumber(szPagesNumber) || testStrByNoNumber(szPrice) || testStrByNoLetter(pBook->szAutor))
 		return -2;
 
 	pBook->nYear = atoi(szYear);

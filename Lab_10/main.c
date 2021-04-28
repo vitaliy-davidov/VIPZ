@@ -1,6 +1,7 @@
 #define _CTR_SECURE_NO_WARNINGS
 #include "stdafx.h"
 #include "linkedList.h"
+#define FIRST_LETTER 'A'
 
 char* ValidateLoad(int returns);
 
@@ -57,7 +58,7 @@ int main()
 	scanf("%s", &szCoise);
 	if (szCoise[0] == '1')
 	{
-		struct SBookList* pFindedBooks = findAllByLetter(pHead, 'A');
+		struct SBookList* pFindedBooks = findAllByLetter(pHead, FIRST_LETTER);
 
 		if (pFindedBooks)
 		{
@@ -73,6 +74,7 @@ int main()
 	{
 		removeAllSmaller(&pHead, findAvgPrice(pHead));
 	}
+	
 	printf("\n");
 	printf("Final list:\n");
 	printf("%-30s%-30s%-10s%-10s%-10s\n", "Autor name", "Book name", "Year", "Pages number", "Price");
