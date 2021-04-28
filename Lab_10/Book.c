@@ -59,8 +59,15 @@ int loadFromFile(FILE* pFile, struct SBook* pBook)
 	if (feof(pFile))
 		return EOF;
 
-	if (5 != fscanf(pFile, "%s%s%d%d%lf\n", pBook->szAutor, pBook->szTitle, &pBook->nYear, &pBook->nPagesNumber, &pBook->dPrice))
+	char szYear[10] = "", szPagesNumber[10] = "", szPrice[10] = "";
+	fscanf(pFile, "%s%s%s%s%s\n", pBook->szAutor, pBook->szTitle, szYear,szPagesNumber, szPrice);
+
+	if (testStrByNumber(szYear) || testStrByNumber(szPagesNumber) || testStrByNumber(szPrice))
 		return -2;
+
+	pBook->nYear = atoi(szYear);
+	pBook->nPagesNumber = atoi(szPagesNumber);
+	pBook->dPrice = atof(szPrice);
 
 	char* pch = NULL;
 	do
@@ -99,4 +106,15 @@ void ConsoleInput(struct SBook* pBook)
 	scanf("%lf", &pBook->dPrice);
 
 	while (getchar() != '\n');
+}
+//------------------------------------------------------------------------------
+int testStrByNumber(char* str)
+{
+	if (strlen(str) == 0) return -2;
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (!isdigit(str[i]) && str[i] != '.')
+			return -1;
+	}
+	return 0;
 }

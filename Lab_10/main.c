@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "linkedList.h"
 
+char* ValidateLoad(int returns);
+
 int main()
 {
 	struct SBookList* pHead = NULL;
@@ -10,7 +12,13 @@ int main()
 	if (toupper(getchar()) == 'F')
 	{
 		FILE* pFile = fopen(".\\Data.txt", "r");
-		loadBooks(pFile, &pHead);
+
+		char outMessage[40] = "";
+		if (strcmp(strcpy(outMessage, ValidateLoad(loadBooks(pFile, &pHead))),"\0"))
+		{
+			printf(outMessage);
+			return -1;
+		}
 
 		fclose(pFile);
 	}
@@ -79,4 +87,24 @@ int main()
 
 	clear(&pHead);
 	return 0;
+}
+
+char* ValidateLoad(int returns)
+{
+	if (returns == 0)
+	{
+		return "\0";
+	}
+	if (returns == -3)
+	{
+		return "Argument exeption";
+	}
+	if (returns == -2)
+	{
+		return "File was corrupted";
+	}
+	if (returns == EOF)
+	{
+		return "File is empty";
+	}
 }
