@@ -1,6 +1,9 @@
 #define _CTR_SECURE_NO_WARNINGS
 #include "stdafx.h"
 #include "linkedList.h"
+#define FIRST_LETTER 'A'
+
+char* ValidateLoad(int returns);
 
 int main()
 {
@@ -10,16 +13,25 @@ int main()
 	if (toupper(getchar()) == 'F')
 	{
 		FILE* pFile = fopen(".\\Data.txt", "r");
-		loadBooks(pFile, &pHead);
+
+		char outMessage[40] = "";
+		if (strcmp(strcpy(outMessage, ValidateLoad(loadBooks(pFile, &pHead))),"\0"))
+		{
+			printf(outMessage);
+			return -1;
+		}
 
 		fclose(pFile);
 	}
 	else
 	{
 		int nBooksNumber = 0;
-		printf("Enter number of books: ");
-		scanf("%d", &nBooksNumber);
-
+		do
+		{
+			printf("Enter number of books: ");
+			if(scanf("%d", &nBooksNumber)) break;
+			printf("Bad input!\n");
+		} while (getchar() != "\n");
 		for (int i = 0; i < nBooksNumber; i++)
 		{
 			struct SBook curBook;
@@ -46,7 +58,7 @@ int main()
 	scanf("%s", &szCoise);
 	if (szCoise[0] == '1')
 	{
-		struct SBookList* pFindedBooks = findAllByLetter(pHead, 'A');
+		struct SBookList* pFindedBooks = findAllByLetter(pHead, FIRST_LETTER);
 
 		if (pFindedBooks)
 		{
@@ -62,6 +74,7 @@ int main()
 	{
 		removeAllSmaller(&pHead, findAvgPrice(pHead));
 	}
+	
 	printf("\n");
 	printf("Final list:\n");
 	printf("%-30s%-30s%-10s%-10s%-10s\n", "Autor name", "Book name", "Year", "Pages number", "Price");
@@ -79,4 +92,24 @@ int main()
 
 	clear(&pHead);
 	return 0;
+}
+
+char* ValidateLoad(int returns)
+{
+	if (returns == 0)
+	{
+		return "\0";
+	}
+	if (returns == -3)
+	{
+		return "Argument exeption";
+	}
+	if (returns == -2)
+	{
+		return "File was corrupted";
+	}
+	if (returns == EOF)
+	{
+		return "File is empty";
+	}
 }

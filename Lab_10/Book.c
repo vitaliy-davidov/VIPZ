@@ -59,8 +59,15 @@ int loadFromFile(FILE* pFile, struct SBook* pBook)
 	if (feof(pFile))
 		return EOF;
 
-	if (5 != fscanf(pFile, "%s%s%d%d%lf\n", pBook->szAutor, pBook->szTitle, &pBook->nYear, &pBook->nPagesNumber, &pBook->dPrice))
+	char szYear[10] = "", szPagesNumber[10] = "", szPrice[10] = "";
+	fscanf(pFile, "%s%s%s%s%s\n", pBook->szAutor, pBook->szTitle, szYear,szPagesNumber, szPrice);
+
+	if (testStrByNoNumber(szYear) || testStrByNoNumber(szPagesNumber) || testStrByNoNumber(szPrice) || testStrByNoLetter(pBook->szAutor))
 		return -2;
+
+	pBook->nYear = atoi(szYear);
+	pBook->nPagesNumber = atoi(szPagesNumber);
+	pBook->dPrice = atof(szPrice);
 
 	char* pch = NULL;
 	do
@@ -82,21 +89,56 @@ int loadFromFile(FILE* pFile, struct SBook* pBook)
 void ConsoleInput(struct SBook* pBook)
 {
 	while (getchar() != '\n');
-
-	printf("Enter author name: ");
-	gets_s(pBook->szAutor, 30);
+	do
+	{
+		printf("Enter author name: ");
+		gets_s(pBook->szAutor, 30);
+		if (testStrByNoLetter(pBook->szAutor))
+			printf("Wrong input\n");
+		else break;
+	} while (1);
 
 	printf("Enter book name: ");
 	gets_s(pBook->szTitle, 30);
 
-	printf("Enter year of publish: ");
-	scanf("%d", &pBook->nYear);
-
-	printf("Enter count of pages: ");
-	scanf("%d", &pBook->nPagesNumber);
-
-	printf("Enter price: ");
-	scanf("%lf", &pBook->dPrice);
-
-	while (getchar() != '\n');
+	do
+	{
+		printf("Enter year of publish: ");
+		if (scanf("%d", &pBook->nYear))break;
+		printf("Wrong input\n");
+	} while (getchar() != '\n');
+	do
+	{
+		printf("Enter count of pages: ");
+		if (scanf("%d", &pBook->nPagesNumber))break;
+		printf("Wrong input\n");
+	} while (getchar() != '\n');
+	do
+	{
+		printf("Enter price: ");
+		if (scanf("%lf", &pBook->dPrice))break;
+		printf("Wrong input\n");
+	} while (getchar() != '\n');
+}
+//------------------------------------------------------------------------------
+int testStrByNoNumber(char* str)
+{
+	if (strlen(str) == 0) return -1;
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (!isdigit(str[i]) && str[i] != '.')
+			return -1;
+	}
+	return 0;
+}
+//------------------------------------------------------------------------------
+int testStrByNoLetter(char* str)
+{
+	if (strlen(str) == 0) return -1;
+	for (int i = 0; i < strlen(str); i++)
+	{
+		if (!isalpha(str[i]))
+			return -1;
+	}
+	return 0;
 }
